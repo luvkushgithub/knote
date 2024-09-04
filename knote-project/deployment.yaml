@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: knote-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: knote
@@ -24,3 +24,4 @@ spec:
         env:
         - name: MONGO_URL
           value: mongodb://mongo:27017/dev
+

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knote-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knote
+  template:
+    metadata:
+      labels:
+        app: knote
+    spec:
+      containers:
+      - name: knote-container
+        image: learnk8s/knote-js:1.0.0
+        env:
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: aws-secret1 
+              key: db_username
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: aws-secret1
+              key: db_password
+        - name: MONGO_URL
+          value: mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongo:27017/dev
+        ports:
+        - containerPort: 3000
