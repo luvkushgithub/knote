@@ -23,7 +23,6 @@ spec:
     metadata:
       labels:
         app: knote
-        app1: knote1
     spec:
       containers:
         - name: knote
