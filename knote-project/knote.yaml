@@ -37,3 +37,36 @@ spec:
             - name: MONGO_URL
               value: mongodb://mongo:27017/dev
           imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+          - "-c"
+          - |
+      # Install necessary tools (e.g., jq for JSON parsing)
+            apk add --no-cache jq
+      
+      # Define the name of the secret
+            SECRET_NAME="app-pod-secret"
+
+      # Initial check
+            SECRET_HASH=$(kubectl get secret $SECRET_NAME -o json | jq -r '.data | to_entries | map(.key) | join(",")' | md5sum | awk '{ print $1 }')
+
+            while true; do
+        # Check for updates
+              NEW_SECRET_HASH=$(kubectl get secret $SECRET_NAME -o json | jq -r '.data | to_entries | map(.key) | join(",")' | md5sum | awk '{ print $1 }')
+        
+              if [ "$SECRET_HASH" != "$NEW_SECRET_HASH" ]; then
+                echo "Secret $SECRET_NAME has been updated!"
+          # Run your command here, e.g., trigger a reload or notify
+          # For demonstration, we just print a message
+                kubectl get pods
+        
+          # Update the hash to the new value
+                SECRET_HASH=$NEW_SECRET_HASH
+              fi
+        
+        # Sleep for a while before checking again
+              sleep 30
+            done
+    # This sidecar runs a script that checks for updates to a secret and runs a command when changes are detected.
+  
+        restartPolicy: Always
