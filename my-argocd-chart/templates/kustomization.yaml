@@ -1,0 +1,15 @@
+resources:
+- knote.yaml
+- mongo.yaml
+- cluster-secret-store.yaml
+- app-secret.yaml
+# Optional patches
+#patchesStrategicMerge:
+#- patch.yaml
+
+# Optional config
+#configMapGenerator:
+#- name: example-config
+#  literals:
+#  - key1=value1
+#  - key2=value2

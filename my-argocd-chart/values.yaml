@@ -1,0 +1,16 @@
+replicaCount: 1
+
+
+service:
+  name: my-service          # Replace with the desired name of your service
+  selector:
+    app: my-app             # Key-value pairs for selecting pods
+    tier: frontend          # Additional selector labels as needed
+  port: 80                  # Port on which the service will be exposed
+  targetPort: 8080          # Port on the container to forward traffic to
+  type: ClusterIP           # Type of service (e.g., ClusterIP, NodePort, LoadBalancer)
+
+
+ingress:
+  enabled: true
+
